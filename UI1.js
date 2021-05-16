@@ -64,16 +64,48 @@ class UI1 extends React.Component {
      return(
             
           <View style = {stil.signInContainer}>
+
               <View style = {stil.InputContainer}>
                   <Text style = {stil.inputCaption}>Kullanıccı </Text>
                   <TextInput
                   style = {stil.input}
                   />
-
-
               </View>
 
+              <View style = {stil.InputContainer}>
+                  <Text style = {stil.inputCaption}>şifre </Text>
+                  <TextInput
+                  style = {stil.input}
+                  />
+              </View>
+               
+               <TouchableOpacity style = {stil.passwordForgotButton}>
+                    <Text style = {[stil.inputCaption , stil.passwordForgot]}>şifreni mi unuttun</Text>
+               </TouchableOpacity>
 
+
+               <TouchableOpacity style = { [stil.Button,stil.LoginButton]}>
+                    <Text style = {stil.LoginButtonText}> Oturum aç  </Text>
+               </TouchableOpacity>
+
+               <TouchableOpacity style = { stil.Button}>
+                    <Text style = {stil.veyaText}> Ve Ya   </Text>
+               </TouchableOpacity>
+ 
+               <View style = {stil.longinButtonContainer}>
+
+               <TouchableOpacity style = { [stil.Button,stil.socialButton]}>
+                    <Text style = {stil.socialButtonText}>  Facebook  </Text>
+               </TouchableOpacity>
+
+               <TouchableOpacity style = { [stil.Button,stil.socialButton]}>
+                    <Text style = {stil.socialButtonText}> Google  </Text>
+               </TouchableOpacity>
+                
+
+               </View>
+ 
+ 
           </View>
 
 
@@ -167,12 +199,12 @@ const stil = StyleSheet.create ({
 
 
      signInContainer : {
-               borderWidth : 1,
+              
                alignItems : 'center',
+               height : H*0.45,
      },
      InputContainer : {
-          borderWidth : 1,
-         
+        
      },
      
      input : {
@@ -181,12 +213,73 @@ const stil = StyleSheet.create ({
           borderBottomColor : 'white',
           fontWeight: 'bold',
           color : 'white' ,
+          paddingTop :0,
      },
      
      inputCaption : {
           color : color2 ,
           fontWeight: 'bold',
      },
+
+     passwordForgotButton : {
+           marginTop : 10 ,
+           marginRight : W * 0.1,
+           alignSelf : 'flex-end',
+     },
+
+     passwordForgot : {
+         
+          fontSize : 12,
+
+
+     },
+
+
+    
+     LoginButton : {
+
+               backgroundColor : color2,
+               marginTop : 15,
+
+     },
+
+
+     LoginButtonText : {
+         color : 'white',
+         fontWeight: 'bold',
+         fontSize :16,
+
+     },
+     veyaText : {
+       fontSize : 12,
+       color : 'white',
+       fontWeight: 'bold',
+ 
+     },
+
+     socialButton : {
+      backgroundColor : 'white', 
+      width : W * 0.3,
+
+     },
+     longinButtonContainer : {
+          flexDirection : 'row',
+          justifyContent : 'space-evenly',
+          width  : W 
+
+     
+     
+
+     },
+     socialButtonText : {
+
+
+          color : 'black',
+          fontWeight: 'bold',
+          fontSize : 16,
+     }
+
+
 
 });
 
