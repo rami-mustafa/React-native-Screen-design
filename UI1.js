@@ -1,5 +1,16 @@
 import React from 'react';
- import {View , Text , StyleSheet , TouchableOpacity , Dimensions , Image, StatusBar, TextInput} from 'react-native';
+ import {View , Text , 
+     StyleSheet ,
+      TouchableOpacity ,
+       Dimensions , Image, 
+       StatusBar, 
+       TextInput,
+       UIManager, 
+       LayoutAnimation, 
+       Platform, 
+       Keyboard
+     
+     } from 'react-native';
 
 const color1 ='#ff5948'; 
 const color2 ='#f8c41c'; 
@@ -9,12 +20,38 @@ const W = Dimensions.get('window').width;
 const H = Dimensions.get('window').height;
 
 
+if (
+     Platform.OS === "android" &&
+     UIManager.setLayoutAnimationEnabledExperimental
+   ) {
+     UIManager.setLayoutAnimationEnabledExperimental(true);
+   }
+
+
 class UI1 extends React.Component {
 
      state ={
-          page : ''
+          page : '' ,
+           Klav : false
          
      };
+      
+
+     componentDidMount(){
+ 
+      Keyboard.addListener('keyboardDidShow', () => {  this.setState ({ Klav: true });  });
+      Keyboard.addListener('keyboardDidHide', () => {  this.setState ({ Klav: false }); });
+ 
+ 
+      }
+
+     componentDidUpdate(){
+
+          LayoutAnimation.spring();
+     }
+
+
+
       
      signUpOnPress = () => {
               
@@ -34,7 +71,16 @@ class UI1 extends React.Component {
     buttons() {
        return(
 
-          <View style = {stil. buttonContainer}>
+          <View style = {
+               [stil. buttonContainer,
+          
+             {
+               height : this.state.page !== '' ? 0 : undefined,
+             }
+          
+          
+          
+          ]}>
 
           <TouchableOpacity 
                style = {[stil.signUpButton , stil.Button]}
@@ -63,7 +109,17 @@ class UI1 extends React.Component {
     signIn (){
      return(
             
-          <View style = {stil.signInContainer}>
+          <View style = {[
+               stil.signInContainer,
+
+               {
+                    marginBottom : H *(this.state.Klav ? 0 : 0.2),
+                    height : this.state.page !== 'signIn' ? 0 : undefined
+               
+               }
+          
+          
+          ]}>
 
               <View style = {stil.InputContainer}>
                   <Text style = {stil.inputCaption}>Kullanıccı </Text>
@@ -84,27 +140,29 @@ class UI1 extends React.Component {
                </TouchableOpacity>
 
 
-               <TouchableOpacity style = { [stil.Button,stil.LoginButton]}>
+               <TouchableOpacity style = { [stil.Button,stil.LoginButton , this.state.Klav && stil.LoginButtonKeyboard]}>
                     <Text style = {stil.LoginButtonText}> Oturum aç  </Text>
                </TouchableOpacity>
+               {
+                    !this.state.Klav &&
+                <>
+                    <TouchableOpacity style = { stil.Button}>
+                         <Text style = {stil.veyaText}> Ve Ya   </Text>
+                    </TouchableOpacity>
+     
+                    <View style = {stil.longinButtonContainer}>
 
-               <TouchableOpacity style = { stil.Button}>
-                    <Text style = {stil.veyaText}> Ve Ya   </Text>
-               </TouchableOpacity>
- 
-               <View style = {stil.longinButtonContainer}>
+                         <TouchableOpacity style = { [stil.Button,stil.socialButton]}>
+                              <Text style = {stil.socialButtonText}>  Facebook  </Text>
+                         </TouchableOpacity>
 
-               <TouchableOpacity style = { [stil.Button,stil.socialButton]}>
-                    <Text style = {stil.socialButtonText}>  Facebook  </Text>
-               </TouchableOpacity>
-
-               <TouchableOpacity style = { [stil.Button,stil.socialButton]}>
-                    <Text style = {stil.socialButtonText}> Google  </Text>
-               </TouchableOpacity>
-                
-
-               </View>
- 
+                         <TouchableOpacity style = { [stil.Button,stil.socialButton]}>
+                              <Text style = {stil.socialButtonText}> Google  </Text>
+                         </TouchableOpacity>
+                         
+                    </View>
+                </>
+               }
  
           </View>
 
@@ -118,20 +176,45 @@ class UI1 extends React.Component {
 
       return (
              <View style={stil.mainContainer} >
-                  <StatusBar translucent backgroundColor={'transparent'}     />
+                  <StatusBar translucent backgroundColor={'transparent'}  />
 
                 <View style = {stil.topContainer}>
-                     <Image 
+
+                     <TouchableOpacity 
+                          onPress={() => this.setState({ page:'' })}  
+                         disabled={this.state.page === ''} // or activeOpacity={this.state.page === '' ? 1 : undefined}     
+                    >
+                    <Image 
                       source={require('./assets/ibooks15.png')}
-                      style = {stil.logo}
+                      style = {[
+                           {
+                            
+                             
+                              width : this.state.Klav    ? W * 0.2 : W * 0.5,
+                              height: this.state.Klav    ? W * 0.2 : W * 0.5,
+                              marginLeft: this.state.Klav ? W * 0.5  : null ,
+                              alignSelf: this.state.Klav  ? 'flex-start': null
+
+                          }
+                    
+                      ]}
                      
-                     />
+                    />
+
+                     </TouchableOpacity>
+                    
                 </View>
 
-                <View style = {stil.bottomContainer}>    
+                <View style = {stil.bottomContainer}>   
+               { /*
                   {this.state.page === ''       && this.buttons()}
                   {this.state.page === 'signUp' && this.signUp() }
                   {this.state.page === 'signIn' && this.signIn() }
+               */}
+                    {this.buttons()}
+                    {this.signIn() }
+                    {/*this.signUp()*/ }
+
                 </View>
 
            </View>
@@ -155,10 +238,7 @@ const stil = StyleSheet.create ({
        alignItems : 'center',
      },
 
-   logo: {
-          width  : W* 0.5,
-          height : W* 0.5,
-     },
+  
 
      bottomContainer: { }, 
      
@@ -166,6 +246,7 @@ const stil = StyleSheet.create ({
   
           height : H*0.25,
           alignItems : 'center',
+          overflow : 'hidden',
 
      },
 
@@ -199,9 +280,9 @@ const stil = StyleSheet.create ({
 
 
      signInContainer : {
-              
+                overflow : 'hidden',              
                alignItems : 'center',
-               height : H*0.45,
+            
      },
      InputContainer : {
         
@@ -213,6 +294,7 @@ const stil = StyleSheet.create ({
           borderBottomColor : 'white',
           fontWeight: 'bold',
           color : 'white' ,
+          
           paddingTop :0,
      },
      
@@ -243,12 +325,18 @@ const stil = StyleSheet.create ({
 
      },
 
+     LoginButtonKeyboard : {
+       borderRadius : 0,
+       width : W
+
+     },
+
 
      LoginButtonText : {
          color : 'white',
          fontWeight: 'bold',
          fontSize :16,
-
+         
      },
      veyaText : {
        fontSize : 12,
@@ -288,3 +376,5 @@ const stil = StyleSheet.create ({
 
 
 export default UI1;
+
+
